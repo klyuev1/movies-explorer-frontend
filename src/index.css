@@ -1,0 +1,76 @@
+/* Подключаем нормалайз */
+@import url(./vendor/normalize.css);
+
+/* Подключаем шрифты */
+@import url(./vendor/fonts/fonts.css);
+
+/* Настраиваем параметры страницы */
+@import url(./components/App/App.css);
+
+/* Общие блоки */
+/* Правила для header */
+@import url(./components/Header/Header.css);
+
+
+/* Правила для main */
+@import url(./components/Main/Main.css);
+
+  /* Правила для promo */
+  @import url(./components/Main/Promo/Promo.css);
+
+  /* Правила для navtab */
+  @import url(./components/Main/NavTab/NavTab.css);
+
+  /* Правила для AboutProject */
+  @import url(./components/Main/AboutProject/AboutProject.css);
+
+  /* Правила для Techs */
+  @import url(./components/Main/Techs/Techs.css);
+  
+  /* Правила для AboutMe */
+  @import url(./components/Main/AboutMe/AboutMe.css);
+
+  /* Правила для Portfolio */
+  @import url(./components/Main/Portfolio/Portfolio.css);
+  
+/* Правила для Footer */
+@import url(./components/Footer/Footer.css);
+
+/* Правила для Movies */
+@import url(./components/Movies/Movies.css);
+
+/* Правила для SearchForm */
+@import url(./components/SearchForm/SearchForm.css);
+  /* Правила для FilterCheckbox */
+  @import url(./components/SearchForm/FilterCheckbox/FilterCheckbox.css);
+  
+/* Правила для MoviesCardList */
+@import url(./components/MoviesCardList/MoviesCardList.css);
+
+/* Правила для MoviesCard*/
+@import url(./components/MoviesCard/MoviesCard.css);
+
+/* Правила для SavedMovies */
+@import url(./components/SavedMovies/SavedMovies.css);
+
+/* Правила для Profile*/
+@import url(./components/Profile/Profile.css);
+
+/* Правила для Register*/
+@import url(./components/Register/Register.css);
+
+/* Правила для Register*/
+@import url(./components/NotFound/NotFound.css);
+
+/* Правила для Popup*/
+@import url(./components/Popup/Popup.css);
+
+/* Правила для NavBar*/
+@import url(./components/NavBar/NavBar.css);
+
+/* Правила для Preloader*/
+@import url(./components/Preloader/Preloader.css);
+
+
+/* Адаптировать Header*/
+/* настроить все кнопки - ссылки. См папку прелоадер */
