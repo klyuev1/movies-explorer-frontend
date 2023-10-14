@@ -1,0 +1,155 @@
+.header {
+  background-color: #FFF;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  padding: 0 70px;
+}
+
+.header__pink{
+  background-color: #F3C1F8;
+}
+
+.header__logo {
+  background: url(../../images/logo.svg);
+  width: 38px;
+  height: 38px;
+  background-size: contain;
+  background-repeat: no-repeat;
+  margin: 18px 0;
+  transition: opacity .2s linear;
+}
+.header__logo:hover {
+  opacity: 0.5;
+}
+
+.header__box {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.header__info {
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 18px;
+  text-decoration: none;
+  color: #000;
+  margin-left: 20px;
+  transition: opacity .2s linear;
+}
+.header__info:first-child {
+  margin: 0;
+}
+.header__info:hover {
+  opacity: 0.7;
+}
+
+.header__user {
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 16px;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  text-decoration: none;
+  color: #000;
+  margin-left: 50px;
+  transition: opacity .2s linear;
+}
+.header__user:hover {
+  opacity: 0.7;
+}
+
+.header__user-logo {
+  background: url(../../images/header-user-light.svg) no-repeat center;
+  background-color: #F9F9F9;
+  border-radius: 6px;
+  width: 30px;
+  height: 30px;
+  margin-left: 13px;
+}
+
+.header__user-logo-pink {
+  background-image: url(../../images/header-user.svg);
+  background-color: #000;
+}
+
+.header__signin-button {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border: 0;
+  background-color: #000;
+  color: #FFF;
+  cursor: pointer;
+  width: 76px;
+  height: 32px;
+  border-radius: 3px;
+  text-decoration: none;
+  transition: opacity .2s linear;
+
+  font-size: 12px;
+  font-weight: 500;
+  line-height: 16px;
+  margin-left: 30px;
+}
+.header__signin-button:hover {
+  opacity: 0.7;
+}
+
+.header__burger {
+  display: none;
+  margin: 0;
+  border: 0;
+  background: url(../../images/burger.svg) no-repeat center;
+  width: 44px;
+  height: 44px;
+  cursor: pointer;
+}
+
+
+@media screen and (max-width: 980px){
+  .header {
+    padding: 0 30px;
+  }
+
+  .header__info {
+    display: none;
+  }
+
+  .header__user {
+    display: none;
+  }
+
+  .header__signin {
+    display: block;
+  }
+
+  .header__burger {
+    display: block;
+  }
+
+  .header__info, .header__user {
+    font-size: 12px;
+    font-weight: 500;
+    line-height: 16px;
+  }
+}
+
+@media screen and (max-width: 680px){
+  .header {
+    padding: 0 14px;
+  }
+
+  .header__signin-button {
+    width: 54px;
+    height: 26px;
+    border-radius: 3px;
+    margin-left: 14px;
+    font-size: 10px;
+  }
+
+
+}
