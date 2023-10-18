@@ -26,7 +26,7 @@ function MoviesCard(props) {
       {location.pathname === "/movies" && <button className={`card__save-button ${isSaveButton ? 'card__save-button-saved' : ''}`} onClick={saveMovie}>Сохранить</button>}
       {location.pathname === "/saved-movies" && <button className='card__delete-button' onClick={deleteMovie} />}
 
-      <img className='card__image' src={props.card.image} />
+      <img className='card__image' src={props.image} />
       
       <div className='card__info'>
         <h3 className='card__name'>{props.card.nameRU}</h3>

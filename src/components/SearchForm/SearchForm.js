@@ -2,12 +2,12 @@ import React from 'react';
 import FilterCheckbox from './FilterCheckbox/FilterCheckbox';
 import lupa from '../../images/lupa.svg';
 
-function SearchForm() {
+function SearchForm({onSubmitMovies}) {
 
   return (
     <section className='search-form'>
 
-      <form className='search-form__container'>
+      <form className='search-form__container' onSubmit={onSubmitMovies}>
       
         <div className='search-form__string'>
           <img className='search-form__glass' src={lupa} />

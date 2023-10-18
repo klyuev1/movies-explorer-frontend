@@ -1,20 +1,22 @@
 import React from 'react';
 import { useLocation } from "react-router-dom"
-import moviesData from '../../utils/moviesData' 
+// import moviesData from '../../utils/moviesData'
 
 import MoviesCard from "../MoviesCard/MoviesCard";
 
-function MoviesCardList() {
+
+function MoviesCardList(props) {
   const location = useLocation();
 
   return (
     <section className='movies-cardlist__container'>
       
       <div className='movies-cardlist'>
-        {moviesData.map(card => 
+        {props.cards.map(card => 
           <MoviesCard 
             key={card._id}
             card={card}
+            image = {`https://api.nomoreparties.co/${card.image.formats.thumbnail.url}`}
           />
         )}
       </div>
