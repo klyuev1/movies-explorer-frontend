@@ -1,7 +1,10 @@
 import { CheckRes } from "./utils"
 
-export const BASE_URL = "https://api.klyuev-movies.nomoredomainsrocks.ru"
+// export const BASE_URL = "https://api.klyuev-movies.nomoredomainsrocks.ru"
+export const BASE_URL = "http://localhost:3001"
 
+
+// Регистрация. Авторизация. Аутентификация
 export const signup = (name, email, password) => {
   return fetch(`${BASE_URL}/signup`, {
     method: 'POST',
@@ -23,11 +26,23 @@ export const signin = (email, password) => {
       'Content-Type': 'application/json'
     },
     credentials: 'include',
-    body: JSON.stringify({email: email, password: password})
+    body: JSON.stringify({email, password})
   })
   .then(CheckRes)
 };
 
+export const signOut = () => {
+  return fetch(`${BASE_URL}/signout`, {
+    method: 'GET',
+    headers: {
+      'Accept': 'application/json',
+      'Content-Type': 'application/json',
+    },
+    credentials: 'include',
+  })
+}
+
+//Данные о пользователе
 export const getContent = () => {
   return fetch(`${BASE_URL}/users/me`, {
     method: 'GET',

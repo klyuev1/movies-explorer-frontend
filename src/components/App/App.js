@@ -1,5 +1,5 @@
 import React from 'react';
-import { Routes, Route} from 'react-router-dom';
+import { Routes, Route, useNavigate, Navigate} from 'react-router-dom';
 import Header from '../Header/Header';
 import Main from '../Main/Main';
 import Movies from '../Movies/Movies';
@@ -11,27 +11,65 @@ import Login from '../Login/Login';
 import NotFound from '../NotFound/NotFound';
 import ProtectedRoute from '../ProtectedRoute/ProtectedRoute';
 import Popup from '../Popup/Popup';
+import InfoTooltip from '../InfoTooltip/InfoTooltip';
+
+// Доделан функционал регистрации. Дальше проброс параметров авторизации
+// в защищенные роуты, валидация регистрации и логина
+
 
 // Новый спринт
-// Остановился на логине
-
+// Импорты
 import CurrentUserContext from '../../contexts/CurrentUserContext';
-import {signup, signin, getContent} from '../../utils/MainApi';
+import {signup, signin, getContent, signOut} from '../../utils/MainApi';
+import truth from '../../images/thurh.svg';
+import fail from '../../images/fail.svg';
+// ----------------------------------------------
+
+
 
 function App() {
-  // Новый спринт
-  const [currentUser, setCurrentUser] = React.useState({});
-  // Защищенный роут. Стейт изменения статуса
   const [isLoggedIn, setIsLoggedIn] = React.useState(false);
   const [isPopupOpen, setIsPopupOpen] = React.useState(false);
   // Новый спринт
+  // Стейты
+  const [currentUser, setCurrentUser] = React.useState({});
+  const navigate = useNavigate();
+  // Стейты изменения данных InfoTooltip
+  const [isInfoTooltipOpen, setIsInfoTooltipOpen] = React.useState(false);
+  const [titleInfo, setTitleInfo] = React.useState("");
+  const [iconInfo, setIconInfo] = React.useState("");
+  
+
+
+  React.useEffect(() => {
+    Promise.all([getContent()])
+    .then((res) => {
+      const [userData] = res;
+      setCurrentUser(userData);
+      console.log(userData);
+      setIsLoggedIn(true);
+    })
+    .catch((err) => console.log(err));
+    // checkToken();
+    //eslint-disable-next-line react-hooks/exhaustive-deps
+  },[]);
+  
+
+  // Функции авторизации
   function handleRegister(name, email, password) {
     signup(name, email, password)
       .then(() => {
-        console.log('УРА2')
+        setIsLoggedIn(true);
+        setTitleInfo("Вы успешно зарегистрировались!");
+        setIconInfo(truth);
+        navigate('/movies', {replace: true});
       })
       .catch(() => {
-        console.log("лох")
+        setTitleInfo("Что-то пошло не так! Попробуйте ещё раз.");
+        setIconInfo(fail);
+      })
+      .finally(() =>{
+        handleInfoTooltipClick();
       })
   }
 
@@ -39,35 +77,53 @@ function App() {
     signin(email, password)
     .then((res) => {
       setIsLoggedIn(true);
-      console.log(res)
+      setTitleInfo("Вы успешно зарегистрировались!");
+      setIconInfo(truth);
+      navigate('/movies', {replace: true});
     })
     .catch(() => {
-      console.log("лох")
+      setTitleInfo("Что-то пошло не так! Попробуйте ещё раз.");
+      setIconInfo(fail);
+    })
+    .finally(() =>{
+      handleInfoTooltipClick();
     })
   }
 
-  function checkToken() {
-    getContent()
-    .then((data) => {
-      if (data){
-        setIsLoggedIn(true);
-        console.log('checkToken')
-      }
-    })
+  // function checkToken() {
+  //   getContent()
+  //   .then((data) => {
+  //     if (data){
+  //       setIsLoggedIn(true);
+  //       console.log('checkToken');
+  //     }
+  //   })
+  //   .catch((err) => console.log(err));
+  // }
+
+  function HandleSignOut() {
+    signOut()
+    .then(() => console.log("see you again oooooo"))
     .catch((err) => console.log(err));
   }
 
-  React.useEffect(() => {
-    checkToken();
-  }, [])
+  // React.useEffect(() => {
+  //   checkToken();
+  // }, [isLoggedIn])
 
+  // инфотултипклик
+  function handleInfoTooltipClick() {
+    setIsInfoTooltipOpen(true);
+  }
+  // ----------------Новый спринт--------------------
 
   function openPopup(){
-    setIsPopupOpen(true)
+    setIsPopupOpen(true);
   }
 
   function closePopup(){
-    setIsPopupOpen(false)
+    setIsPopupOpen(false);
+    setIsInfoTooltipOpen(false);
   }
 
   
@@ -111,7 +167,7 @@ function App() {
               />
               <ProtectedRoute
                 element={Movies}
-                loggedIn={isLoggedIn}
+                isLoggedIn={isLoggedIn}
               />
               <Footer/>
             </>
@@ -125,7 +181,7 @@ function App() {
               />
               <ProtectedRoute
                 element={SavedMovies}
-                loggedIn={isLoggedIn}
+                isLoggedIn={isLoggedIn}
               />
               <Footer/>
             </>
@@ -139,7 +195,8 @@ function App() {
               />
               <ProtectedRoute
                 element={Profile}
-                loggedIn={isLoggedIn}
+                isLoggedIn={isLoggedIn}
+                onSignOut={HandleSignOut}
               />
             </>
           }/>
@@ -154,6 +211,14 @@ function App() {
           isOpen={isPopupOpen}
           closePopup = {closePopup}
         />
+
+        <InfoTooltip
+          isOpen={isInfoTooltipOpen}
+          onClose={closePopup}
+          title={titleInfo}
+          icon={iconInfo}
+        />
+
       </div>
       
     </CurrentUserContext.Provider>

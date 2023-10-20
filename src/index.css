@@ -71,6 +71,5 @@
 /* Правила для Preloader*/
 @import url(./components/Preloader/Preloader.css);
 
-
-/* Адаптировать Header*/
-/* настроить все кнопки - ссылки. См папку прелоадер */
+/* Правила для InfoTooltip*/
+@import url(./components/InfoTooltip/InfoTooltip.css);

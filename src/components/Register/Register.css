@@ -51,6 +51,7 @@
   padding-left: 15px;
   color: #000;
   margin-top: 10px;
+  margin-bottom: 10px;
 
   font-size: 13px;
   font-weight: 400;
@@ -72,6 +73,10 @@
   font-weight: 500;
   line-height: 17px;
   color: #FFF;
+  transition: opacity .2s linear;
+}
+.register__submit:hover {
+  opacity: 0.8;
 }
 
 .register__postscript {
@@ -88,6 +93,23 @@
   color: #000;
   text-decoration: none;
   margin-left: 2px;
+  transition: opacity .2s linear;
+}
+.register__link:hover {
+  opacity: 0.8;
+}
+
+.register__input_error {
+  color: #FF4062;
+}
+
+.register__submit_disabled {
+  background-color: #A0A0A0;
+}
+
+.register__input-span_error {
+  color: #FF4062;
+  min-height: 12px;
 }
 
 @media screen and (max-width: 980px){

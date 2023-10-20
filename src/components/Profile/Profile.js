@@ -1,6 +1,6 @@
 import React from 'react';
 
-function Profile() {
+function Profile({onSignOut}) {
 
   
   return (
@@ -21,7 +21,7 @@ function Profile() {
       </form>
 
       <button className='profile__edit-button' type='submit'>Редактировать</button>
-      <button className='profile__exit-button' type='button'>Выйти из аккаунта</button>
+      <button className='profile__exit-button' type='button' onClick={onSignOut}>Выйти из аккаунта</button>
 
     </section>
   );
