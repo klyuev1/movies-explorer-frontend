@@ -54,3 +54,57 @@ export const getContent = () => {
   })
   .then(CheckRes)
 }
+
+export const updateProfile = (name, email) => {
+  return fetch(`${BASE_URL}/users/me`, {
+      method: 'PATCH',
+      headers: {
+          "Content-Type": "application/json"
+      },
+      credentials: "include",
+      body: JSON.stringify({
+          "name": name,
+          "email": email
+      }),
+  })
+}
+
+//Данные о фильмах
+export const getMovies = () => {
+  return fetch(`${BASE_URL}/movies`, {
+      method: 'GET',
+      headers: {
+          "Accept": "application/json",
+          "Content-Type": "application/json",
+      },
+      credentials: "include"
+  })
+}
+
+export const postMovie = ({
+  country, director, duration, year, description,
+  image, trailerLink, nameRU, nameEN, thumbnail, movieId
+}) => {
+  return fetch(`${BASE_URL}/movies`, {
+      method: 'POST',
+      headers: {
+          "Content-Type": "application/json"
+      },
+      credentials: "include",
+      body: JSON.stringify({
+        country, director, duration, year, description,
+        image, trailerLink, nameRU, nameEN, thumbnail, movieId
+      }),
+  })
+}
+
+export const deleteMovie = (moviesId) => {
+  return fetch(`${BASE_URL}/movies/${moviesId}`, {
+      method: 'DELETE',
+      headers: {
+          "Accept": "application/json",
+          "Content-Type": "application/json",
+      },
+      credentials: "include"
+  })
+}

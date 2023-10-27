@@ -13,48 +13,68 @@ import ProtectedRoute from '../ProtectedRoute/ProtectedRoute';
 import Popup from '../Popup/Popup';
 import InfoTooltip from '../InfoTooltip/InfoTooltip';
 
-// Доделан функционал регистрации. Дальше проброс параметров авторизации
-// в защищенные роуты, валидация регистрации и логина
+// Профиль, и др компоненты -- функционал 
+// ошибка в профиле связанная с Currentuser
 
 
 // Новый спринт
 // Импорты
 import CurrentUserContext from '../../contexts/CurrentUserContext';
-import {signup, signin, getContent, signOut} from '../../utils/MainApi';
+import {signup, signin, getContent, signOut, updateProfile, getMovies, postMovie, deleteMovie} from '../../utils/MainApi';
 import truth from '../../images/thurh.svg';
 import fail from '../../images/fail.svg';
+import {DATA_URL, MOVIES_S, MOVIES_M, MOVIES_L, MOVIES_XL, WIDTH_M, WIDTH_L, WIDTH_XL, MOVIES_MORE_M, MOVIES_MORE_L, MOVIES_MORE_XL} from '../../utils/utils';
+import {useResize} from '../../utils/useResize';
 // ----------------------------------------------
 
 
 
 function App() {
-  const [isLoggedIn, setIsLoggedIn] = React.useState(false);
+  const navigate = useNavigate();
+  const [isLoggedIn, setIsLoggedIn] = React.useState(true);
   const [isPopupOpen, setIsPopupOpen] = React.useState(false);
   // Новый спринт
   // Стейты
-  const [currentUser, setCurrentUser] = React.useState({});
-  const navigate = useNavigate();
+  const [currentUser, setCurrentUser] = React.useState({
+    name: '',
+    email: ''
+  });
   // Стейты изменения данных InfoTooltip
   const [isInfoTooltipOpen, setIsInfoTooltipOpen] = React.useState(false);
   const [titleInfo, setTitleInfo] = React.useState("");
   const [iconInfo, setIconInfo] = React.useState("");
   
-
-
   React.useEffect(() => {
+    if (isLoggedIn){
     Promise.all([getContent()])
-    .then((res) => {
-      const [userData] = res;
+    .then(([userData]) => {
       setCurrentUser(userData);
-      console.log(userData);
-      setIsLoggedIn(true);
+      // console.log(userData);
     })
     .catch((err) => console.log(err));
-    // checkToken();
+  }
     //eslint-disable-next-line react-hooks/exhaustive-deps
-  },[]);
-  
+  },[isLoggedIn]);
 
+  // Функции проверки авторизации
+  function checkToken() {
+    getContent()
+    .then((data) => {
+      
+        setIsLoggedIn(true);
+        console.log('checkToken');
+    })
+    .catch((err) => {
+      setIsLoggedIn(false);
+      console.log(err)
+    });
+  }
+
+  React.useEffect(() => {
+    checkToken();
+    
+  }, [])
+  
   // Функции авторизации
   function handleRegister(name, email, password) {
     signup(name, email, password)
@@ -63,6 +83,13 @@ function App() {
         setTitleInfo("Вы успешно зарегистрировались!");
         setIconInfo(truth);
         navigate('/movies', {replace: true});
+        
+        getMovies()
+        .then(data => data.json())
+        .then((data)=> {
+          setSavedMovies(data);
+          console.log(data);
+        })
       })
       .catch(() => {
         setTitleInfo("Что-то пошло не так! Попробуйте ещё раз.");
@@ -75,11 +102,18 @@ function App() {
 
   function handleLogin(email, password) {
     signin(email, password)
-    .then((res) => {
+    .then(() => {
       setIsLoggedIn(true);
       setTitleInfo("Вы успешно зарегистрировались!");
       setIconInfo(truth);
       navigate('/movies', {replace: true});
+
+      getMovies()
+        .then(data => data.json())
+        .then((data)=> {
+          setSavedMovies(data);
+          console.log(data);
+        })
     })
     .catch(() => {
       setTitleInfo("Что-то пошло не так! Попробуйте ещё раз.");
@@ -90,35 +124,121 @@ function App() {
     })
   }
 
-  // function checkToken() {
-  //   getContent()
-  //   .then((data) => {
-  //     if (data){
-  //       setIsLoggedIn(true);
-  //       console.log('checkToken');
-  //     }
-  //   })
-  //   .catch((err) => console.log(err));
-  // }
-
   function HandleSignOut() {
     signOut()
-    .then(() => console.log("see you again oooooo"))
+    .then(() => {
+      navigate('/signin', {replace: true})
+      setSavedMovies([]);
+      setFormValueFound('');
+      setShortMovies(false);
+      setMoviesFound([]);
+
+    })
     .catch((err) => console.log(err));
   }
 
-  // React.useEffect(() => {
-  //   checkToken();
-  // }, [isLoggedIn])
-
-  // инфотултипклик
-  function handleInfoTooltipClick() {
-    setIsInfoTooltipOpen(true);
+  function handleUpdateUser(name, email) {
+    updateProfile(name, email)
+      .then(res => res.json())
+      .then((res) => {
+        setTitleInfo("Данные о профиле изменены");
+        setIconInfo(truth);
+        setCurrentUser(res.user);
+      })
+      .catch(() => {
+        setTitleInfo("Что-то пошло не так! Попробуйте ещё раз.");
+        setIconInfo(fail);
+      })
+      .finally(() =>{
+        handleInfoTooltipClick();
+      })
   }
-  // ----------------Новый спринт--------------------
 
+  const [savedMovies, setSavedMovies] = React.useState([]);
+  
+  const [formValueFound, setFormValueFound] = React.useState((localStorage.getItem('moviesPlaceholder')) || '');
+  const [moviesFound, setMoviesFound] = React.useState(JSON.parse(localStorage.getItem('moviesFound')) || []);
+  const [shortMovies, setShortMovies] = React.useState(JSON.parse(localStorage.getItem('shortMovies')) || false);
+  
+  const [moviesToDrow, setMoviesToDrow] = React.useState([]);
+
+  function handleLikeMovie(card) {
+    postMovie({
+      country: card.country,
+      director: card.director,
+      duration: card.duration,
+      year: card.year,
+      description: card.description,
+      image: `${DATA_URL}${card.image.url}`,
+      trailerLink: card.trailerLink,
+      nameRU: card.nameRU,
+      nameEN: card.nameEN,
+      thumbnail: `${DATA_URL}${card.image.formats.thumbnail.url}`,
+      movieId: card.id
+    })
+    .then(() =>{
+      getMovies()
+      .then(res => res.json())
+      .then((data) =>{
+        setSavedMovies(data)
+        console.log(data)
+      })
+      .catch((err) => console.log(err));
+    })
+    .catch((err) => console.log('err'));
+  }
+
+  function handleDeleteMovie(card) {
+    deleteMovie(card._id)
+    .then(() =>{
+      setSavedMovies((state) => state.filter((c) => c._id !== card._id));
+      getMovies()
+      .then(res => res.json())
+      .then((data) =>{
+        console.log(data)
+        setSavedMovies(data);
+
+      })
+      .catch((err) => console.log(err));
+    })
+    .catch((err) => console.log(err));
+  }
+
+  const {width} = useResize();
+  const [moviesToWidth, setMoviesToWidth] = React.useState({all: Number, more: Number});
+
+  function handleChangeNumberCards(width) {
+    if (width > WIDTH_XL) 
+      {setMoviesToWidth({all: MOVIES_XL, more: MOVIES_MORE_XL})}
+    if ((width > WIDTH_L) && (width <= WIDTH_XL)) 
+      {setMoviesToWidth({all: MOVIES_L, more: MOVIES_MORE_L})}
+    if ((width > WIDTH_M) && (width < WIDTH_L)) 
+      {setMoviesToWidth({all: MOVIES_M, more: MOVIES_MORE_M})}
+    if (width <= WIDTH_M) 
+      {setMoviesToWidth({all: MOVIES_S, more: MOVIES_MORE_M})}
+    return
+  }
+
+  React.useEffect(() => {
+    handleChangeNumberCards(width);
+
+  }, [width, moviesFound]);
+
+  React.useEffect(() => {
+    // console.log(width)
+    setMoviesToDrow(moviesFound.slice(0, moviesToWidth.all));
+    console.log(moviesToDrow);
+
+  }, [moviesFound]);
+
+  // ----------------Новый спринт--------------------
+  // Попапы
   function openPopup(){
     setIsPopupOpen(true);
+  }
+
+  function handleInfoTooltipClick() {
+    setIsInfoTooltipOpen(true);
   }
 
   function closePopup(){
@@ -163,11 +283,22 @@ function App() {
             <>
               <Header
                 isLoggedIn={isLoggedIn}
-                openPopup= {openPopup}
+                openPopup={openPopup}
               />
               <ProtectedRoute
                 element={Movies}
                 isLoggedIn={isLoggedIn}
+                moviesFound={moviesFound}
+                setMoviesFound={setMoviesFound}
+                // savedMovies={savedMovies}
+                formValueFound={formValueFound}
+                setFormValueFound={setFormValueFound}
+                handleLikeMovie={handleLikeMovie}
+                handleDeleteMovie={handleDeleteMovie}
+                
+                moviesToWidth={moviesToWidth}
+                setMoviesToWidth={setMoviesToWidth}
+                moviesToDrow={moviesToDrow}
               />
               <Footer/>
             </>
@@ -182,6 +313,12 @@ function App() {
               <ProtectedRoute
                 element={SavedMovies}
                 isLoggedIn={isLoggedIn}
+                savedMovies={savedMovies}
+                setSavedMovies={setSavedMovies}
+                handleDeleteMovie={handleDeleteMovie}
+                
+                formValueFound={formValueFound}
+                handleLikeMovie={handleLikeMovie}
               />
               <Footer/>
             </>
@@ -197,6 +334,7 @@ function App() {
                 element={Profile}
                 isLoggedIn={isLoggedIn}
                 onSignOut={HandleSignOut}
+                onUpdateUser={handleUpdateUser}
               />
             </>
           }/>

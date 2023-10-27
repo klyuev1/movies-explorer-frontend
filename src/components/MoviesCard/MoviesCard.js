@@ -1,23 +1,28 @@
 import React from 'react';
 import { Link, useLocation} from 'react-router-dom';
 
-function MoviesCard(props) {
+function MoviesCard({card, image, handleLikeMovie, handleDeleteMovie}) {
   const location = useLocation();
   const [isSaveButton, setIsSaveButton] = React.useState(false);
+ 
+  
 
   function durationConvert(min){
     let hours = Math.trunc(min/60);
     let minutes = min % 60;
     return hours + 'ч ' + minutes + 'м';
   }
-  const time = durationConvert(props.card.duration)
+  const time = durationConvert(card.duration)
 
-  function saveMovie () {
-    setIsSaveButton((state) => !state);
+  function saveMovie() {
+    handleLikeMovie(card);
+    setIsSaveButton(true);
   }
 
-  function deleteMovie () {
-    console.log('hi');
+  function deleteMovie() {
+    handleDeleteMovie(card);
+    setIsSaveButton(false);
+    
   }
 
   return (
@@ -26,10 +31,12 @@ function MoviesCard(props) {
       {location.pathname === "/movies" && <button className={`card__save-button ${isSaveButton ? 'card__save-button-saved' : ''}`} onClick={saveMovie}>Сохранить</button>}
       {location.pathname === "/saved-movies" && <button className='card__delete-button' onClick={deleteMovie} />}
 
-      <img className='card__image' src={props.image} />
+      <a className='card__link' href={card.trailerLink} target='_blank'>
+        <img className='card__image' src={image} />
+      </a>
       
       <div className='card__info'>
-        <h3 className='card__name'>{props.card.nameRU}</h3>
+        <h3 className='card__name'>{card.nameRU}</h3>
         <p className='card__time'>{time}</p>
       </div>
     </div>

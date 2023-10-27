@@ -72,6 +72,17 @@
   margin-bottom: 20px;
 }
 
+.profile__input_error {
+  color: #FF4062;
+}
+
+.profile__input-span_error {
+  font-size: 10px;
+  font-weight: 400;
+  line-height: 12px;
+  color: #FF4062;
+}
+
 @media screen and (max-width: 980px){
   .profile__title {
     margin-top: 236px;
