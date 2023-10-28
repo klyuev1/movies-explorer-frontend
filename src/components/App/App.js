@@ -1,5 +1,5 @@
 import React from 'react';
-import { Routes, Route, useNavigate, Navigate} from 'react-router-dom';
+import { Routes, Route, useNavigate} from 'react-router-dom';
 import Header from '../Header/Header';
 import Main from '../Main/Main';
 import Movies from '../Movies/Movies';
@@ -12,21 +12,13 @@ import NotFound from '../NotFound/NotFound';
 import ProtectedRoute from '../ProtectedRoute/ProtectedRoute';
 import Popup from '../Popup/Popup';
 import InfoTooltip from '../InfoTooltip/InfoTooltip';
-
-// Профиль, и др компоненты -- функционал 
-// ошибка в профиле связанная с Currentuser
-
-
 // Новый спринт
-// Импорты
 import CurrentUserContext from '../../contexts/CurrentUserContext';
 import {signup, signin, getContent, signOut, updateProfile, getMovies, postMovie, deleteMovie} from '../../utils/MainApi';
 import truth from '../../images/thurh.svg';
 import fail from '../../images/fail.svg';
-import {DATA_URL, MOVIES_S, MOVIES_M, MOVIES_L, MOVIES_XL, WIDTH_M, WIDTH_L, WIDTH_XL, MOVIES_MORE_M, MOVIES_MORE_L, MOVIES_MORE_XL} from '../../utils/utils';
+import {DATA_URL, MOVIES_S, MOVIES_M, MOVIES_L, MOVIES_XL, WIDTH_M, WIDTH_L, WIDTH_XL, MOVIES_MORE_M, MOVIES_MORE_L, MOVIES_MORE_XL, DURATION} from '../../utils/utils';
 import {useResize} from '../../utils/useResize';
-// ----------------------------------------------
-
 
 
 function App() {
@@ -34,12 +26,7 @@ function App() {
   const [isLoggedIn, setIsLoggedIn] = React.useState(true);
   const [isPopupOpen, setIsPopupOpen] = React.useState(false);
   // Новый спринт
-  // Стейты
-  const [currentUser, setCurrentUser] = React.useState({
-    name: '',
-    email: ''
-  });
-  // Стейты изменения данных InfoTooltip
+  const [currentUser, setCurrentUser] = React.useState({ name: '', email: '' });
   const [isInfoTooltipOpen, setIsInfoTooltipOpen] = React.useState(false);
   const [titleInfo, setTitleInfo] = React.useState("");
   const [iconInfo, setIconInfo] = React.useState("");
@@ -134,7 +121,10 @@ function App() {
       setMoviesFound([]);
 
     })
-    .catch((err) => console.log(err));
+    .catch((err) => console.log(err))
+    .finally(() =>{
+      localStorage.clear();
+    })
   }
 
   function handleUpdateUser(name, email) {
@@ -154,13 +144,14 @@ function App() {
       })
   }
 
+  //-----------------------------------------
   const [savedMovies, setSavedMovies] = React.useState([]);
-  
   const [formValueFound, setFormValueFound] = React.useState((localStorage.getItem('moviesPlaceholder')) || '');
   const [moviesFound, setMoviesFound] = React.useState(JSON.parse(localStorage.getItem('moviesFound')) || []);
   const [shortMovies, setShortMovies] = React.useState(JSON.parse(localStorage.getItem('shortMovies')) || false);
-  
   const [moviesToDrow, setMoviesToDrow] = React.useState([]);
+  const {width} = useResize();
+  const [moviesToWidth, setMoviesToWidth] = React.useState({all: Number, more: Number});
 
   function handleLikeMovie(card) {
     postMovie({
@@ -204,9 +195,6 @@ function App() {
     .catch((err) => console.log(err));
   }
 
-  const {width} = useResize();
-  const [moviesToWidth, setMoviesToWidth] = React.useState({all: Number, more: Number});
-
   function handleChangeNumberCards(width) {
     if (width > WIDTH_XL) 
       {setMoviesToWidth({all: MOVIES_XL, more: MOVIES_MORE_XL})}
@@ -225,11 +213,18 @@ function App() {
   }, [width, moviesFound]);
 
   React.useEffect(() => {
-    // console.log(width)
-    setMoviesToDrow(moviesFound.slice(0, moviesToWidth.all));
+    if (shortMovies === true) {
+      let moviesShort = moviesFound.filter(function(movie) {
+        return (movie.duration < DURATION);
+      });
+      setMoviesToDrow(moviesShort.slice(0, moviesToWidth.all))
+      console.log(moviesToDrow);
+    } else {
+    setMoviesToDrow(moviesFound.slice(0, moviesToWidth.all))
     console.log(moviesToDrow);
-
-  }, [moviesFound]);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  },[moviesToWidth.all, moviesFound, shortMovies]);
 
   // ----------------Новый спринт--------------------
   // Попапы
@@ -290,11 +285,15 @@ function App() {
                 isLoggedIn={isLoggedIn}
                 moviesFound={moviesFound}
                 setMoviesFound={setMoviesFound}
-                // savedMovies={savedMovies}
+                savedMovies={savedMovies}
+                // setSavedMovies={setSavedMovies}
                 formValueFound={formValueFound}
                 setFormValueFound={setFormValueFound}
                 handleLikeMovie={handleLikeMovie}
                 handleDeleteMovie={handleDeleteMovie}
+
+                shortMovies = {shortMovies}
+                setShortMovies = {setShortMovies}
                 
                 moviesToWidth={moviesToWidth}
                 setMoviesToWidth={setMoviesToWidth}
@@ -319,6 +318,9 @@ function App() {
                 
                 formValueFound={formValueFound}
                 handleLikeMovie={handleLikeMovie}
+
+                shortMovies = {shortMovies}
+                setShortMovies = {setShortMovies}
               />
               <Footer/>
             </>

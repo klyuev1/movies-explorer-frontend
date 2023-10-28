@@ -1,11 +1,8 @@
 import React from 'react';
-import { Link, useLocation} from 'react-router-dom';
+import { useLocation} from 'react-router-dom';
 
-function MoviesCard({card, image, handleLikeMovie, handleDeleteMovie}) {
+function MoviesCard({card, image, handleLikeMovie, handleDeleteMovie, savedMovies}) {
   const location = useLocation();
-  const [isSaveButton, setIsSaveButton] = React.useState(false);
- 
-  
 
   function durationConvert(min){
     let hours = Math.trunc(min/60);
@@ -14,25 +11,37 @@ function MoviesCard({card, image, handleLikeMovie, handleDeleteMovie}) {
   }
   const time = durationConvert(card.duration)
 
-  function saveMovie() {
-    handleLikeMovie(card);
-    setIsSaveButton(true);
+  let isLiked = false;
+  const isSaved = card._id;
+  let movieWithId;
+
+  if (isSaved===undefined) {
+    movieWithId = savedMovies.find(element => element.movieId === card.id)
+    if (movieWithId !== undefined){
+      isLiked = true;
+    } else {
+      isLiked = false;
+    }
   }
 
-  function deleteMovie() {
+  function handleLike() {
+    handleLikeMovie(card);
+    isLiked = true;
+  }
+
+  function handleDelete() {
     handleDeleteMovie(card);
-    setIsSaveButton(false);
-    
+    isLiked = false;
   }
 
   return (
     <div className="card">
       
-      {location.pathname === "/movies" && <button className={`card__save-button ${isSaveButton ? 'card__save-button-saved' : ''}`} onClick={saveMovie}>Сохранить</button>}
-      {location.pathname === "/saved-movies" && <button className='card__delete-button' onClick={deleteMovie} />}
+      {location.pathname === "/movies" && <button className={`card__save-button ${isLiked ? 'card__save-button-saved' : ''}`} onClick={handleLike} disabled={isLiked}>Сохранить</button>}
+      {location.pathname === "/saved-movies" && <button className='card__delete-button' onClick={handleDelete} />}
 
-      <a className='card__link' href={card.trailerLink} target='_blank'>
-        <img className='card__image' src={image} />
+      <a className='card__link' href={card.trailerLink} target='_blank' rel="noreferrer">
+        <img className='card__image' src={image} alt=''/>
       </a>
       
       <div className='card__info'>

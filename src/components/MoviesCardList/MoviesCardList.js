@@ -1,11 +1,9 @@
 import React from 'react';
 import { useLocation } from "react-router-dom"
-// import moviesData from '../../utils/moviesData'
-
 import MoviesCard from "../MoviesCard/MoviesCard";
 
 
-function MoviesCardList({moviesFound, handleLikeMovie, handleDeleteMovie, moviesToWidth, setMoviesToWidth}) {
+function MoviesCardList({moviesFound, handleLikeMovie, handleDeleteMovie, moviesToWidth, setMoviesToWidth, savedMovies}) {
   const location = useLocation();
 
   function ChangeNumberCards() {
@@ -20,11 +18,12 @@ function MoviesCardList({moviesFound, handleLikeMovie, handleDeleteMovie, movies
       <div className='movies-cardlist'>
         {moviesFound.map((card) => {
           return <MoviesCard 
-            key={card._id}
             card={card}
+            key={card._id}
             image = {location.pathname === "/movies" ? (`https://api.nomoreparties.co/${card.image.formats.thumbnail.url}`) : (card.image)}
             handleLikeMovie={handleLikeMovie}
             handleDeleteMovie={handleDeleteMovie}
+            savedMovies={savedMovies}
           />}
         )}
       </div>

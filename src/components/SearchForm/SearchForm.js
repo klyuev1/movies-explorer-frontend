@@ -2,7 +2,8 @@ import React from 'react';
 import FilterCheckbox from './FilterCheckbox/FilterCheckbox';
 import lupa from '../../images/lupa.svg';
 
-function SearchForm({handleSearch, formValueFound, wordFind, setWordFind}) {
+function SearchForm({handleSearch, formValueFound, wordFind, setWordFind, shortMovies, setShortMovies}) {
+  
   const [formValue, setFormValue] = React.useState(formValueFound || '');
   const [isValidForm, setIsValidForm] = React.useState(true);
 
@@ -28,7 +29,7 @@ function SearchForm({handleSearch, formValueFound, wordFind, setWordFind}) {
       <form className='search-form__container' onSubmit={handleSubmitMovies}>
       
         <div className='search-form__string'>
-          <img className='search-form__glass' src={lupa} />
+          <img className='search-form__glass' src={lupa} alt='заполнить'/>
           <input 
             className='search-form__input' placeholder='Фильм'
             id="searchMovie" name="searchMovie" type='text'
@@ -42,7 +43,11 @@ function SearchForm({handleSearch, formValueFound, wordFind, setWordFind}) {
         
         <div className='search-form__string'>
           <div className='search-form__br' />
-          <FilterCheckbox />
+          <FilterCheckbox 
+            shortMovies = {shortMovies}
+            setShortMovies = {setShortMovies}
+            
+          />
         </div>
       </form>
 

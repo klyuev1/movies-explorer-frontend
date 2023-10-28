@@ -1,15 +1,20 @@
 import React from 'react';
 
-function FilterCheckbox() {
-  const [isShortMovies, SetIsShortMovies] = React.useState(false);
+function FilterCheckbox({shortMovies, setShortMovies}) {
 
   function filterShortMovies () {
-    SetIsShortMovies((state) => !state);
+    if (shortMovies === true){
+      setShortMovies(false)
+      localStorage.setItem('shortMovies', JSON.stringify(false));
+    } else {
+      setShortMovies(true)
+      localStorage.setItem('shortMovies', JSON.stringify(true));
+    }
   }
 
   return (
     <div className='filter-checkbox__container'>
-      <button className={`filter-checkbox__button ${isShortMovies ? 'filter-checkbox__button_disabled' : ''}`} type='button' onClick={filterShortMovies}>
+      <button className={`filter-checkbox__button ${shortMovies ? 'filter-checkbox__button_disabled' : ''}`} type='button' onClick={filterShortMovies}>
         <div className='filter-checkbox__circle' />
       </button>
 

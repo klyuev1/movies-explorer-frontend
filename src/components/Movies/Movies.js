@@ -3,20 +3,17 @@ import SearchForm from '../SearchForm/SearchForm';
 import MoviesCardList from '../MoviesCardList/MoviesCardList';
 import {getAllMovies} from '../../utils/MoviesApi';
 
-function Movies({moviesFound, setMoviesFound, formValueFound, setFormValueFound, handleLikeMovie, handleDeleteMovie, moviesToWidth, setMoviesToWidth, moviesToDrow}) {
+function Movies({moviesFound, setMoviesFound, formValueFound, setFormValueFound, handleLikeMovie, handleDeleteMovie, moviesToWidth, setMoviesToWidth, moviesToDrow, shortMovies, setShortMovies, savedMovies}) {
   
   const [wordFind, setWordFind] = React.useState('');
 
-
-
-  function handleSearch(wordFind) {
-    console.log(moviesFound);
+  async function handleSearch(wordFind) {
 
     localStorage.setItem('moviesPlaceholder', wordFind);
     setFormValueFound(localStorage.getItem('moviesPlaceholder'))
     let storageAllMovies = JSON.parse(localStorage.getItem('allMovies'));
     if (storageAllMovies === null) {
-      getAllMovies()
+      await getAllMovies()
       .then((res) => {
         localStorage.setItem('allMovies', JSON.stringify(res));
         storageAllMovies = JSON.parse(localStorage.getItem('allMovies'));
@@ -33,7 +30,6 @@ function Movies({moviesFound, setMoviesFound, formValueFound, setFormValueFound,
     localStorage.setItem('moviesFound', JSON.stringify(findedMovies));
     setMoviesFound(findedMovies);
     
-
   }
 
   return (
@@ -43,14 +39,17 @@ function Movies({moviesFound, setMoviesFound, formValueFound, setFormValueFound,
         formValueFound={formValueFound}
         wordFind={wordFind}
         setWordFind={setWordFind}
+
+        shortMovies = {shortMovies}
+        setShortMovies = {setShortMovies}
       />
       <MoviesCardList 
-        moviesFound={moviesFound} // здесь должен быть moviesToDrow
+        moviesFound={moviesToDrow} // здесь должен быть moviesToDrow
         handleLikeMovie={handleLikeMovie}
         handleDeleteMovie={handleDeleteMovie}
-
         moviesToWidth={moviesToWidth}
         setMoviesToWidth={setMoviesToWidth}
+        savedMovies={savedMovies}
       />
     </main>
   );
