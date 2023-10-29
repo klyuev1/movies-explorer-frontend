@@ -43,7 +43,7 @@ function MoviesCard({card, image, handleLikeMovie, handleDeleteMovie, savedMovie
       {location.pathname === "/saved-movies" && <button className='card__delete-button' onClick={handleDelete} />}
 
       <a className='card__link' href={card.trailerLink} target='_blank' rel="noreferrer">
-        <img className='card__image' src={image} alt=''/>
+        <img className='card__image' src={image} alt={card.nameRU}/>
       </a>
       
       <div className='card__info'>

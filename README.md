@@ -1,7 +1,20 @@
-# Getting Started with Create React App
+# Movies
+В рамках курса Веб-разработчик от Яндекс.Практикума, я реализовал дипломную работу в виде веб-приложения, позволяющего пользователям просматривать фильмы, а также создавать аккаунт и сохранять фильмы в личном списке.
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+### Стек технологий:
+***Frontend:*** React
+***Backend:*** Node.js
+***Database:*** Mongodb
+***Markup Language:*** JSX
 
-## Available Scripts
+### Описание проекта:
+Проект представляет собой веб-приложение, которое позволяет пользователям просматривать список доступных фильмов. Пользователи могут выбрать фильм из списка, а также добавить его в список избранных.
+Приложение также предоставляет возможность создания аккаунта для пользователей, которые хотят сохранять свои любимые фильмы в личном списке.
 
-name of maket: light-4
+### Links:
+#### Frontend:
+[Макет](https://www.figma.com/file/6FMWkB94wE7KTkcCgUXtnC/Дипломный-проект?type=design&node-id=1-2798&mode=design)
+[Репозиторий](https://github.com/klyuev1/movies-explorer-frontend)
+[Пул-реквест]()
+Сайт: klyuev-movies.nomoredomainsrocks.ru
+IP: 158.160.33.89

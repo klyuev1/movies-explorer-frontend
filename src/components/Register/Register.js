@@ -1,10 +1,15 @@
 import React from 'react';
+import { useNavigate, Link } from 'react-router-dom'
 import logo from '../../images/logo.svg'
-import {Link} from 'react-router-dom';
 import Validation from '../../utils/Validation';
 
 
-function Register({onRegister}) {
+function Register({onRegister, isLoggedIn}) {
+
+  const navigate = useNavigate();
+  if (isLoggedIn === true) {
+    navigate('/profile');
+  }
 
   const [formValue, setFormValue] = React.useState({
     name: '',
@@ -29,7 +34,7 @@ function Register({onRegister}) {
   
   return (
     <section className='register'>
-      <img className='register__logo' src={logo} />
+      <Link className='register__logo-link' to='/'><img className='register__logo' src={logo} alt='лого'/></Link>
       <h2 className='register__title'>Добро пожаловать!</h2>
       
       <form className='register__form' onSubmit={handleSubmit}>

@@ -6,7 +6,7 @@ import Preloader from '../Preloader/Preloader';
 import NothingToShow from '../NothingToShow/NothingToShow';
 
 
-function Movies({setMoviesFound, formValueFound, setFormValueFound, handleLikeMovie, handleDeleteMovie, moviesToWidth, setMoviesToWidth, moviesToDrow, shortMovies, setShortMovies, savedMovies, isLoading, setIsLoading}) {
+function Movies({ moviesFound, setMoviesFound,  formValueFound, setFormValueFound, handleLikeMovie, handleDeleteMovie, moviesToWidth, setMoviesToWidth, moviesToDrow, shortMovies, setShortMovies, savedMovies, isLoading, setIsLoading}) {
   
   const [wordFind, setWordFind] = React.useState('');
 
@@ -53,8 +53,10 @@ function Movies({setMoviesFound, formValueFound, setFormValueFound, handleLikeMo
         <Preloader /> ) : ((moviesToDrow.length === 0) && (JSON.parse(localStorage.getItem('allMovies')) !== null)) ? (
         <NothingToShow  text = 'Ничего не найдено'/>
         ) : (
-          <MoviesCardList 
-            moviesFound={moviesToDrow} // здесь должен быть moviesToDrow
+          <MoviesCardList
+            handleSearch={handleSearch}
+            moviesFoundDefault={moviesFound}
+            moviesFound={moviesToDrow}
             handleLikeMovie={handleLikeMovie}
             handleDeleteMovie={handleDeleteMovie}
             moviesToWidth={moviesToWidth}

@@ -46,7 +46,6 @@ function SearchForm({handleSearch, formValueFound, wordFind, setWordFind, shortM
           <FilterCheckbox 
             shortMovies = {shortMovies}
             setShortMovies = {setShortMovies}
-            
           />
         </div>
       </form>

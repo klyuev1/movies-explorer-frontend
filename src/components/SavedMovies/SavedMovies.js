@@ -1,7 +1,6 @@
 import React from 'react';
 import SearchForm from '../SearchForm/SearchForm';
 import MoviesCardList from '../MoviesCardList/MoviesCardList';
-import Preloader from '../Preloader/Preloader';
 import NothingToShow from '../NothingToShow/NothingToShow';
 
 function SavedMovies({savedMovies, handleDeleteMovie, handleLikeMovie}) {
@@ -42,6 +41,7 @@ function SavedMovies({savedMovies, handleDeleteMovie, handleLikeMovie}) {
       : (
         <MoviesCardList 
           moviesFound={moviesSavedFound}
+          moviesFoundDefault={moviesSavedFound}
           handleLikeMovie={handleLikeMovie}
           handleDeleteMovie={handleDeleteMovie}
         />

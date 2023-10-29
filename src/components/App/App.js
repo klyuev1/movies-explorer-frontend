@@ -66,7 +66,7 @@ function App() {
 
   React.useEffect(() => {
     checkToken();
-  }, [])
+  }, [isLoggedIn])
   
   // Функции авторизации
   function handleRegister(name, email, password) {
@@ -85,34 +85,26 @@ function App() {
               })
           })
           .catch(() => {
-            setTitleInfo("Что-то пошло не так! Попробуйте ещё раз.");
+            setTitleInfo("Что-то пошло не так! Попробуйте ещё раз");
             setIconInfo(fail);
           })
           .finally(() =>{
             handleInfoTooltipClick();
           })
-          // Дописать оставшиеся ошибки!!!
-          // Дописать оставшиеся ошибки!!!
-          // Дописать оставшиеся ошибки!!!
-      //   setIsLoggedIn(true);
-      //   setTitleInfo("Вы успешно зарегистрировались!");
-      //   setIconInfo(truth);
-      //   navigate('/', {replace: true});
-      //   setMoviesFound([]);
-        
-      //   getMovies()
-      //   .then((data)=> {
-      //     setSavedMovies(data);
-      //   })
-      // })
-      // .catch(() => {
-      //   setTitleInfo("Что-то пошло не так! Попробуйте ещё раз.");
-      //   setIconInfo(fail);
-      // })
-      // .finally(() =>{
-      //   handleInfoTooltipClick();
-      // })
-    })
+      })
+      .catch((error) => {
+        if (error === 409){
+            setTitleInfo("Пользователь с таким Email уже зарегистрирован");
+            setIconInfo(fail);
+        } else {
+            setTitleInfo("Что-то не так с введенными данными");
+            setIconInfo(fail);
+        }
+      })
+      .finally(() =>{
+        handleInfoTooltipClick();
+      })
+    
   }
 
   function handleLogin(email, password) {
@@ -121,7 +113,7 @@ function App() {
       setIsLoggedIn(true);
       setTitleInfo("Вы успешно авторизировались!");
       setIconInfo(truth);
-      navigate('/', {replace: true});
+      navigate('/movies', {replace: true});
 
       getMovies()
         .then((data)=> {
@@ -140,11 +132,12 @@ function App() {
   function HandleSignOut() {
     signOut()
     .then(() => {
-      navigate('/signin', {replace: true})
+      setIsLoggedIn(false);
       setSavedMovies([]);
       setFormValueFound('');
       setShortMovies(false);
       setMoviesFound([]);
+      navigate('/')
 
     })
     .catch((err) => console.log(err))
@@ -168,8 +161,6 @@ function App() {
         handleInfoTooltipClick();
       })
   }
-
-  //-----------------------------------------
   
 
   function handleLikeMovie(card) {
@@ -190,7 +181,6 @@ function App() {
       getMovies()
       .then((data) =>{
         setSavedMovies(data)
-        console.log(data)
       })
       .catch((err) => console.log(err));
     })
@@ -203,7 +193,6 @@ function App() {
       setSavedMovies((state) => state.filter((c) => c._id !== card._id));
       getMovies()
       .then((data) =>{
-        console.log(data)
         setSavedMovies(data);
 
       })
@@ -233,10 +222,8 @@ function App() {
         return (movie.duration < DURATION);
       });
       setMoviesToDrow(moviesShort.slice(0, moviesToWidth.all))
-      console.log(moviesToDrow);
     } else {
     setMoviesToDrow(moviesFound.slice(0, moviesToWidth.all))
-    console.log(moviesToDrow);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   },[moviesToWidth.all, moviesFound, shortMovies]);
@@ -263,13 +250,15 @@ function App() {
 
           {/* Незащищенные роуты */}
           <Route path='/signup' element={
-            <Register 
+            <Register
+              isLoggedIn={isLoggedIn}
               onRegister={handleRegister}
             />
           }/>
 
           <Route path='/signin' element={
-            <Login 
+            <Login
+              isLoggedIn={isLoggedIn}
               onLogin={handleLogin}
             />
           }/>
