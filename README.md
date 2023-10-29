@@ -15,6 +15,6 @@
 #### Frontend:
 [Макет](https://www.figma.com/file/6FMWkB94wE7KTkcCgUXtnC/Дипломный-проект?type=design&node-id=1-2798&mode=design)
 [Репозиторий](https://github.com/klyuev1/movies-explorer-frontend)
-[Пул-реквест]()
+[Пул-реквест](https://github.com/klyuev1/movies-explorer-frontend/pull/2)
 Сайт: klyuev-movies.nomoredomainsrocks.ru
 IP: 158.160.33.89
