@@ -17,7 +17,7 @@ import CurrentUserContext from '../../contexts/CurrentUserContext';
 import {signup, signin, getContent, signOut, updateProfile, getMovies, postMovie, deleteMovie} from '../../utils/MainApi';
 import truth from '../../images/thurh.svg';
 import fail from '../../images/fail.svg';
-import {DATA_URL, MOVIES_S, MOVIES_M, MOVIES_L, MOVIES_XL, WIDTH_M, WIDTH_L, WIDTH_XL, MOVIES_MORE_M, MOVIES_MORE_L, MOVIES_MORE_XL, DURATION} from '../../utils/utils';
+import {DATA_URL, MOVIES_S, MOVIES_M, MOVIES_L, WIDTH_M, WIDTH_L, MOVIES_MORE_M, MOVIES_MORE_L, DURATION} from '../../utils/utils';
 import {useResize} from '../../utils/useResize';
 
 
@@ -30,13 +30,22 @@ function App() {
   const [isInfoTooltipOpen, setIsInfoTooltipOpen] = React.useState(false);
   const [titleInfo, setTitleInfo] = React.useState("");
   const [iconInfo, setIconInfo] = React.useState("");
+
+  const {width} = useResize();
+  const [savedMovies, setSavedMovies] = React.useState([]);
+  const [formValueFound, setFormValueFound] = React.useState((localStorage.getItem('moviesPlaceholder')) || '');
+  const [moviesFound, setMoviesFound] = React.useState(JSON.parse(localStorage.getItem('moviesFound')) || []);
+  const [shortMovies, setShortMovies] = React.useState(JSON.parse(localStorage.getItem('shortMovies')) || false);
+  const [moviesToDrow, setMoviesToDrow] = React.useState([]);
+  const [moviesToWidth, setMoviesToWidth] = React.useState({all: Number, more: Number});
+  const [isLoading, setIsLoading] = React.useState(false)
   
   React.useEffect(() => {
     if (isLoggedIn){
-    Promise.all([getContent()])
-    .then(([userData]) => {
+    Promise.all([getContent(), getMovies()])
+    .then(([userData, moviesData]) => {
       setCurrentUser(userData);
-      // console.log(userData);
+      setSavedMovies(moviesData);
     })
     .catch((err) => console.log(err));
   }
@@ -46,10 +55,8 @@ function App() {
   // Функции проверки авторизации
   function checkToken() {
     getContent()
-    .then((data) => {
-      
-        setIsLoggedIn(true);
-        console.log('checkToken');
+    .then(() => {
+      setIsLoggedIn(true);
     })
     .catch((err) => {
       setIsLoggedIn(false);
@@ -59,47 +66,66 @@ function App() {
 
   React.useEffect(() => {
     checkToken();
-    
   }, [])
   
   // Функции авторизации
   function handleRegister(name, email, password) {
     signup(name, email, password)
       .then(() => {
-        setIsLoggedIn(true);
-        setTitleInfo("Вы успешно зарегистрировались!");
-        setIconInfo(truth);
-        navigate('/movies', {replace: true});
+        signin(email, password)
+          .then(() => {
+            setIsLoggedIn(true);
+            setTitleInfo("Вы успешно зарегистрировались!");
+            setIconInfo(truth);
+            navigate('/', {replace: true});
+
+            getMovies()
+              .then((data)=> {
+                setSavedMovies(data);
+              })
+          })
+          .catch(() => {
+            setTitleInfo("Что-то пошло не так! Попробуйте ещё раз.");
+            setIconInfo(fail);
+          })
+          .finally(() =>{
+            handleInfoTooltipClick();
+          })
+          // Дописать оставшиеся ошибки!!!
+          // Дописать оставшиеся ошибки!!!
+          // Дописать оставшиеся ошибки!!!
+      //   setIsLoggedIn(true);
+      //   setTitleInfo("Вы успешно зарегистрировались!");
+      //   setIconInfo(truth);
+      //   navigate('/', {replace: true});
+      //   setMoviesFound([]);
         
-        getMovies()
-        .then(data => data.json())
-        .then((data)=> {
-          setSavedMovies(data);
-          console.log(data);
-        })
-      })
-      .catch(() => {
-        setTitleInfo("Что-то пошло не так! Попробуйте ещё раз.");
-        setIconInfo(fail);
-      })
-      .finally(() =>{
-        handleInfoTooltipClick();
-      })
+      //   getMovies()
+      //   .then((data)=> {
+      //     setSavedMovies(data);
+      //   })
+      // })
+      // .catch(() => {
+      //   setTitleInfo("Что-то пошло не так! Попробуйте ещё раз.");
+      //   setIconInfo(fail);
+      // })
+      // .finally(() =>{
+      //   handleInfoTooltipClick();
+      // })
+    })
   }
 
   function handleLogin(email, password) {
     signin(email, password)
     .then(() => {
       setIsLoggedIn(true);
-      setTitleInfo("Вы успешно зарегистрировались!");
+      setTitleInfo("Вы успешно авторизировались!");
       setIconInfo(truth);
-      navigate('/movies', {replace: true});
+      navigate('/', {replace: true});
 
       getMovies()
-        .then(data => data.json())
         .then((data)=> {
           setSavedMovies(data);
-          console.log(data);
         })
     })
     .catch(() => {
@@ -129,7 +155,6 @@ function App() {
 
   function handleUpdateUser(name, email) {
     updateProfile(name, email)
-      .then(res => res.json())
       .then((res) => {
         setTitleInfo("Данные о профиле изменены");
         setIconInfo(truth);
@@ -145,13 +170,7 @@ function App() {
   }
 
   //-----------------------------------------
-  const [savedMovies, setSavedMovies] = React.useState([]);
-  const [formValueFound, setFormValueFound] = React.useState((localStorage.getItem('moviesPlaceholder')) || '');
-  const [moviesFound, setMoviesFound] = React.useState(JSON.parse(localStorage.getItem('moviesFound')) || []);
-  const [shortMovies, setShortMovies] = React.useState(JSON.parse(localStorage.getItem('shortMovies')) || false);
-  const [moviesToDrow, setMoviesToDrow] = React.useState([]);
-  const {width} = useResize();
-  const [moviesToWidth, setMoviesToWidth] = React.useState({all: Number, more: Number});
+  
 
   function handleLikeMovie(card) {
     postMovie({
@@ -169,7 +188,6 @@ function App() {
     })
     .then(() =>{
       getMovies()
-      .then(res => res.json())
       .then((data) =>{
         setSavedMovies(data)
         console.log(data)
@@ -184,7 +202,6 @@ function App() {
     .then(() =>{
       setSavedMovies((state) => state.filter((c) => c._id !== card._id));
       getMovies()
-      .then(res => res.json())
       .then((data) =>{
         console.log(data)
         setSavedMovies(data);
@@ -196,13 +213,11 @@ function App() {
   }
 
   function handleChangeNumberCards(width) {
-    if (width > WIDTH_XL) 
-      {setMoviesToWidth({all: MOVIES_XL, more: MOVIES_MORE_XL})}
-    if ((width > WIDTH_L) && (width <= WIDTH_XL)) 
+    if (width > WIDTH_L) 
       {setMoviesToWidth({all: MOVIES_L, more: MOVIES_MORE_L})}
     if ((width > WIDTH_M) && (width < WIDTH_L)) 
       {setMoviesToWidth({all: MOVIES_M, more: MOVIES_MORE_M})}
-    if (width <= WIDTH_M) 
+    if (width <= WIDTH_M)
       {setMoviesToWidth({all: MOVIES_S, more: MOVIES_MORE_M})}
     return
   }
@@ -226,7 +241,6 @@ function App() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   },[moviesToWidth.all, moviesFound, shortMovies]);
 
-  // ----------------Новый спринт--------------------
   // Попапы
   function openPopup(){
     setIsPopupOpen(true);
@@ -286,7 +300,6 @@ function App() {
                 moviesFound={moviesFound}
                 setMoviesFound={setMoviesFound}
                 savedMovies={savedMovies}
-                // setSavedMovies={setSavedMovies}
                 formValueFound={formValueFound}
                 setFormValueFound={setFormValueFound}
                 handleLikeMovie={handleLikeMovie}
@@ -298,6 +311,10 @@ function App() {
                 moviesToWidth={moviesToWidth}
                 setMoviesToWidth={setMoviesToWidth}
                 moviesToDrow={moviesToDrow}
+
+                isLoading = {isLoading}
+                setIsLoading = {setIsLoading}
+                
               />
               <Footer/>
             </>
@@ -312,13 +329,11 @@ function App() {
               <ProtectedRoute
                 element={SavedMovies}
                 isLoggedIn={isLoggedIn}
+
                 savedMovies={savedMovies}
                 setSavedMovies={setSavedMovies}
                 handleDeleteMovie={handleDeleteMovie}
-                
-                formValueFound={formValueFound}
                 handleLikeMovie={handleLikeMovie}
-
                 shortMovies = {shortMovies}
                 setShortMovies = {setShortMovies}
               />

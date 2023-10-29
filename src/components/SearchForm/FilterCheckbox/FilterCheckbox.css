@@ -8,14 +8,14 @@
 .filter-checkbox__button {
   margin: 0;
   border: 0;
-  background-color: #2BE080;
   width: 34px;
   height: 14px;
   border-radius: 20px;
   display: flex;
   flex-direction: row;
-  justify-content: flex-end;
   align-items: center;
+  background-color: #EBEBEB;
+  justify-content: flex-start;
   cursor: pointer;
 }
 
@@ -36,8 +36,8 @@
 }
 
 .filter-checkbox__button_disabled {
-  background-color: #EBEBEB;
-  justify-content: flex-start;
+  background-color: #2BE080;
+  justify-content: flex-end;
 }
 
 @media screen and (max-width: 980px){

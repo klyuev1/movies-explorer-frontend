@@ -1,8 +1,10 @@
 import React from 'react';
 import SearchForm from '../SearchForm/SearchForm';
 import MoviesCardList from '../MoviesCardList/MoviesCardList';
+import Preloader from '../Preloader/Preloader';
+import NothingToShow from '../NothingToShow/NothingToShow';
 
-function SavedMovies({savedMovies, handleDeleteMovie, formValueFound, handleLikeMovie}) {
+function SavedMovies({savedMovies, handleDeleteMovie, handleLikeMovie}) {
   
   const [isShortMoviesSaved, setIsShortMoviesSaved] = React.useState(false);
   const [moviesSavedFound, setMoviesSavedFound] = React.useState(savedMovies);
@@ -27,18 +29,24 @@ function SavedMovies({savedMovies, handleDeleteMovie, formValueFound, handleLike
     <main className='saved-movies'>
       <SearchForm 
         handleSearch={foundMovies}
-        formValueFound={formValueFound}
         wordFind={wordFind}
         setWordFind={setWordFind}
         shortMovies = {isShortMoviesSaved}
         setShortMovies = {setIsShortMoviesSaved}
       />
-      <MoviesCardList 
-        moviesFound={moviesSavedFound}
-        handleLikeMovie={handleLikeMovie}
-        handleDeleteMovie={handleDeleteMovie}
-        // savedMovies={moviesSavedFound}
-      />
+
+      {(savedMovies.length === 0)
+      ? (<NothingToShow text = 'Сохраненных фильмов нет'/>) 
+      : ((moviesSavedFound.length === 0) 
+      ? (<NothingToShow text = 'Ничего не найдено'/>) 
+      : (
+        <MoviesCardList 
+          moviesFound={moviesSavedFound}
+          handleLikeMovie={handleLikeMovie}
+          handleDeleteMovie={handleDeleteMovie}
+        />
+      ))}
+      
     </main>
   );
 }

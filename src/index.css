@@ -73,3 +73,6 @@
 
 /* Правила для InfoTooltip*/
 @import url(./components/InfoTooltip/InfoTooltip.css);
+
+/* Правила для NothingToShow*/
+@import url(./components/NothingToShow/NothingToShow.css);

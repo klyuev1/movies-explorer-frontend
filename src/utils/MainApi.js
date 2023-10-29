@@ -40,6 +40,7 @@ export const signOut = () => {
     },
     credentials: 'include',
   })
+  .then(CheckRes)
 }
 
 //Данные о пользователе
@@ -67,6 +68,7 @@ export const updateProfile = (name, email) => {
           "email": email
       }),
   })
+  .then(CheckRes)
 }
 
 //Данные о фильмах
@@ -79,6 +81,7 @@ export const getMovies = () => {
       },
       credentials: "include"
   })
+  .then(CheckRes)
 }
 
 export const postMovie = ({
@@ -94,8 +97,9 @@ export const postMovie = ({
       body: JSON.stringify({
         country, director, duration, year, description,
         image, trailerLink, nameRU, nameEN, thumbnail, movieId
-      }),
+      }),  
   })
+  .then(CheckRes)
 }
 
 export const deleteMovie = (moviesId) => {
@@ -107,4 +111,5 @@ export const deleteMovie = (moviesId) => {
       },
       credentials: "include"
   })
+  .then(CheckRes)
 }

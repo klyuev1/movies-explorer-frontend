@@ -15,6 +15,8 @@ function MoviesCard({card, image, handleLikeMovie, handleDeleteMovie, savedMovie
   const isSaved = card._id;
   let movieWithId;
 
+  
+
   if (isSaved===undefined) {
     movieWithId = savedMovies.find(element => element.movieId === card.id)
     if (movieWithId !== undefined){

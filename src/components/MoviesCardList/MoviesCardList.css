@@ -32,6 +32,10 @@
   cursor: pointer;
 }
 
+.movies-cardlist__more-button_hidden {
+  display: none;
+}
+
 @media screen and (max-width: 980px){
   .movies-cardlist__container {
     min-height: 755px;
@@ -44,6 +48,13 @@
   .movies-cardlist__more-button {
     margin-top: 48px;
     margin-bottom: 80px;
+  }
+}
+
+@media screen and (max-width: 720px){
+  .movies-cardlist {
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    column-gap: 20px;
   }
 }
 

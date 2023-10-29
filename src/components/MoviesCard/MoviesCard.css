@@ -50,6 +50,11 @@
   width: 21px;
   border-radius: 50%;
   text-indent: -9999em;
+  cursor: default;
+  transition: none;
+}
+.card__save-button-saved:hover {
+  opacity: 1;
 }
 
 .card__info {

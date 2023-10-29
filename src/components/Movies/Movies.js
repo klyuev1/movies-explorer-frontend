@@ -2,13 +2,17 @@ import React from 'react';
 import SearchForm from '../SearchForm/SearchForm';
 import MoviesCardList from '../MoviesCardList/MoviesCardList';
 import {getAllMovies} from '../../utils/MoviesApi';
+import Preloader from '../Preloader/Preloader';
+import NothingToShow from '../NothingToShow/NothingToShow';
 
-function Movies({moviesFound, setMoviesFound, formValueFound, setFormValueFound, handleLikeMovie, handleDeleteMovie, moviesToWidth, setMoviesToWidth, moviesToDrow, shortMovies, setShortMovies, savedMovies}) {
+
+function Movies({setMoviesFound, formValueFound, setFormValueFound, handleLikeMovie, handleDeleteMovie, moviesToWidth, setMoviesToWidth, moviesToDrow, shortMovies, setShortMovies, savedMovies, isLoading, setIsLoading}) {
   
   const [wordFind, setWordFind] = React.useState('');
 
   async function handleSearch(wordFind) {
-
+    
+    setIsLoading(true);
     localStorage.setItem('moviesPlaceholder', wordFind);
     setFormValueFound(localStorage.getItem('moviesPlaceholder'))
     let storageAllMovies = JSON.parse(localStorage.getItem('allMovies'));
@@ -17,6 +21,7 @@ function Movies({moviesFound, setMoviesFound, formValueFound, setFormValueFound,
       .then((res) => {
         localStorage.setItem('allMovies', JSON.stringify(res));
         storageAllMovies = JSON.parse(localStorage.getItem('allMovies'));
+        setIsLoading(false);
       })
       .catch(err => {
         console.log(err);
@@ -29,6 +34,7 @@ function Movies({moviesFound, setMoviesFound, formValueFound, setFormValueFound,
     });
     localStorage.setItem('moviesFound', JSON.stringify(findedMovies));
     setMoviesFound(findedMovies);
+    setIsLoading(false);
     
   }
 
@@ -43,14 +49,20 @@ function Movies({moviesFound, setMoviesFound, formValueFound, setFormValueFound,
         shortMovies = {shortMovies}
         setShortMovies = {setShortMovies}
       />
-      <MoviesCardList 
-        moviesFound={moviesToDrow} // здесь должен быть moviesToDrow
-        handleLikeMovie={handleLikeMovie}
-        handleDeleteMovie={handleDeleteMovie}
-        moviesToWidth={moviesToWidth}
-        setMoviesToWidth={setMoviesToWidth}
-        savedMovies={savedMovies}
-      />
+      {isLoading === true ? (
+        <Preloader /> ) : ((moviesToDrow.length === 0) && (JSON.parse(localStorage.getItem('allMovies')) !== null)) ? (
+        <NothingToShow  text = 'Ничего не найдено'/>
+        ) : (
+          <MoviesCardList 
+            moviesFound={moviesToDrow} // здесь должен быть moviesToDrow
+            handleLikeMovie={handleLikeMovie}
+            handleDeleteMovie={handleDeleteMovie}
+            moviesToWidth={moviesToWidth}
+            setMoviesToWidth={setMoviesToWidth}
+            savedMovies={savedMovies}
+          />
+        )}
+      
     </main>
   );
 }
