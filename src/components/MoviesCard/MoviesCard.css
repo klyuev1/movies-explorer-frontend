@@ -50,11 +50,11 @@
   width: 21px;
   border-radius: 50%;
   text-indent: -9999em;
-  cursor: default;
-  transition: none;
+  cursor: pointer;
+  transition: opacity .2s linear;
 }
 .card__save-button-saved:hover {
-  opacity: 1;
+  opacity: 0.8;
 }
 
 .card__info {

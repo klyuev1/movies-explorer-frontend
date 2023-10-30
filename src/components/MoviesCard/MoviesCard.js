@@ -15,8 +15,6 @@ function MoviesCard({card, image, handleLikeMovie, handleDeleteMovie, savedMovie
   const isSaved = card._id;
   let movieWithId;
 
-  
-
   if (isSaved===undefined) {
     movieWithId = savedMovies.find(element => element.movieId === card.id)
     if (movieWithId !== undefined){
@@ -28,6 +26,11 @@ function MoviesCard({card, image, handleLikeMovie, handleDeleteMovie, savedMovie
 
   function handleLike() {
     handleLikeMovie(card);
+    isLiked = true; 
+  }
+
+  function handleDislike() {
+    handleDeleteMovie(movieWithId);
     isLiked = true;
   }
 
@@ -39,8 +42,8 @@ function MoviesCard({card, image, handleLikeMovie, handleDeleteMovie, savedMovie
   return (
     <div className="card">
       
-      {location.pathname === "/movies" && <button className={`card__save-button ${isLiked ? 'card__save-button-saved' : ''}`} onClick={handleLike} disabled={isLiked}>Сохранить</button>}
-      {location.pathname === "/saved-movies" && <button className='card__delete-button' onClick={handleDelete} />}
+      {location.pathname === "/movies" && <button className={`card__save-button ${isLiked ? 'card__save-button-saved' : ''}`} onClick={isLiked ? handleDislike : handleLike}>Сохранить</button>}
+      {location.pathname === "/saved-movies" && <button className='card__delete-button' onClick={handleDelete}/>}
 
       <a className='card__link' href={card.trailerLink} target='_blank' rel="noreferrer">
         <img className='card__image' src={image} alt={card.nameRU}/>

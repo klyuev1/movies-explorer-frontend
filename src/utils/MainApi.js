@@ -82,6 +82,7 @@ export const getMovies = () => {
       credentials: "include"
   })
   .then(CheckRes)
+  .then(console.log('hi'))
 }
 
 export const postMovie = ({

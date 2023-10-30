@@ -1,5 +1,5 @@
 import React from 'react';
-import { Routes, Route, useNavigate} from 'react-router-dom';
+import { Routes, Route, useNavigate } from 'react-router-dom';
 import Header from '../Header/Header';
 import Main from '../Main/Main';
 import Movies from '../Movies/Movies';
@@ -18,7 +18,7 @@ import {signup, signin, getContent, signOut, updateProfile, getMovies, postMovie
 import truth from '../../images/thurh.svg';
 import fail from '../../images/fail.svg';
 import {DATA_URL, MOVIES_S, MOVIES_M, MOVIES_L, WIDTH_M, WIDTH_L, MOVIES_MORE_M, MOVIES_MORE_L, DURATION} from '../../utils/utils';
-import {useResize} from '../../utils/useResize';
+import {Resize} from '../../utils/Resize';
 
 
 function App() {
@@ -31,7 +31,7 @@ function App() {
   const [titleInfo, setTitleInfo] = React.useState("");
   const [iconInfo, setIconInfo] = React.useState("");
 
-  const {width} = useResize();
+  const {width} = Resize();
   const [savedMovies, setSavedMovies] = React.useState([]);
   const [formValueFound, setFormValueFound] = React.useState((localStorage.getItem('moviesPlaceholder')) || '');
   const [moviesFound, setMoviesFound] = React.useState(JSON.parse(localStorage.getItem('moviesFound')) || []);
@@ -77,7 +77,7 @@ function App() {
             setIsLoggedIn(true);
             setTitleInfo("Вы успешно зарегистрировались!");
             setIconInfo(truth);
-            navigate('/', {replace: true});
+            navigate('/movies', {replace: true});
 
             getMovies()
               .then((data)=> {
