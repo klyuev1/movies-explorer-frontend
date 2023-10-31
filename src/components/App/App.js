@@ -46,8 +46,12 @@ function App() {
     .then(([userData, moviesData]) => {
       setCurrentUser(userData);
       setSavedMovies(moviesData);
+      setIsLoggedIn(true);
     })
-    .catch((err) => console.log(err));
+    .catch((err) => {
+      console.log(err)
+      setIsLoggedIn(false);
+    });
   }
     //eslint-disable-next-line react-hooks/exhaustive-deps
   },[isLoggedIn]);
