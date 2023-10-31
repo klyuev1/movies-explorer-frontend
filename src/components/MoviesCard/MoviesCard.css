@@ -1,0 +1,135 @@
+.card {
+  margin: 0;
+  width: 100%;
+  box-sizing: border-box;
+  position: relative;
+}
+
+.card__save-button {
+  border: 0;
+  background-color: #F9F9F9;
+  position: absolute;
+  top: 14px;
+  right: 14px;
+  width: 72px;
+  height: 21px;
+  border-radius: 30px;
+  font-size: 10px;
+  font-weight: 400;
+  line-height: 9px;
+  cursor: pointer;
+  transition: opacity .2s linear;
+}
+.card__save-button:hover {
+  opacity: 0.7;
+}
+
+.card__delete-button {
+  margin: 0;
+  padding: 0;
+  border: 0;
+  background: url(../../images/cad-button_delete.svg) no-repeat center;
+  background-color: #F9F9F9;
+  position: absolute;
+  top: 14px;
+  right: 14px;
+  width: 21px;
+  height: 21px;
+  border-radius: 50%;
+  cursor: pointer;
+  transition: opacity .2s linear;
+}
+.card__delete-button:hover {
+  opacity: 0.7;
+}
+
+
+.card__save-button-saved {
+  background: url(../../images/cad-button_saved.svg) no-repeat center;
+  background-color: #FF4062;
+  width: 21px;
+  border-radius: 50%;
+  text-indent: -9999em;
+  cursor: pointer;
+  transition: opacity .2s linear;
+}
+.card__save-button-saved:hover {
+  opacity: 0.8;
+}
+
+.card__info {
+  margin: 10px 22px 0 15px;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: start;
+  height: 33px;
+}
+
+.card__name {
+  margin: 0;
+  font-size: 13px;
+  font-weight: 500;
+  line-height: 16px;
+
+}
+
+.card__time {
+  margin: 0;
+  font-size: 11px;
+  font-weight: 400;
+  line-height: 10px;
+  color: #A0A0A0;
+  margin-left: 30px;
+  margin-top: 4px;
+}
+
+.card__image {
+  width: 100%;
+  object-position: center;
+  object-fit: cover;
+  height: 201px;
+  border-radius: 6px;
+}
+
+@media screen and (max-width: 980px){
+  .card__info {
+    margin: 20px 0 0 0;
+  }
+
+  .card__image {
+    height: 190px;
+  }
+  .card__time {
+    margin-right: 8px;
+  }
+}
+
+@media screen and (max-width: 680px){
+  .card__info {
+    margin: 13px 10px 0 0;
+  }
+  
+  .card__name {
+    font-size: 12px;
+    line-height: 15px;
+  }
+
+  .card__save-button {
+    top: 10px;
+    right: 10px;
+  }
+
+  .card__delete-button {
+    top: 10px;
+    right: 10px;
+  }
+
+  .card__image {
+    height: 168px;
+  }
+
+  .card__time {
+    margin-right: 0;
+  }
+}
