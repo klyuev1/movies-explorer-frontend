@@ -1,6 +1,6 @@
 import { React, useState, useContext, useEffect } from "react";
 import CurrentUserContext from '../../contexts/CurrentUserContext';
-import Validation from '../../utils/Validation'; 
+import UseValidation from '../../utils/UseValidation'; 
 
 function Profile({onSignOut, onUpdateUser}) {
   const currentUser = useContext(CurrentUserContext);
@@ -11,7 +11,7 @@ function Profile({onSignOut, onUpdateUser}) {
   });
 
   const [isChanges, setIsChanges] = useState(false);
-  const { formErrors, isValidForm, handleChange, resetForm } = Validation(formValue, setFormValue);
+  const { formErrors, isValidForm, handleChange, resetForm } = UseValidation(formValue, setFormValue);
 
   useEffect(() => {
     if ((formValue.email !== currentUser.email) || (formValue.name !== currentUser.name)) {

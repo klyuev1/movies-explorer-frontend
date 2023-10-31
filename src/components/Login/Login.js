@@ -1,7 +1,7 @@
 import React from 'react';
 import { useNavigate, Link } from 'react-router-dom'
 import logo from '../../images/logo.svg'
-import Validation from '../../utils/Validation';
+import UseValidation from '../../utils/UseValidation';
 
 function Login({onLogin, isLoggedIn}) {
   
@@ -15,7 +15,7 @@ function Login({onLogin, isLoggedIn}) {
     password: ''
   });
 
-  const { formErrors, isValidForm, handleChange, resetForm } = Validation(formValue, setFormValue);
+  const { formErrors, isValidForm, handleChange, resetForm } = UseValidation(formValue, setFormValue);
 
   React.useEffect(() =>{
     resetForm({

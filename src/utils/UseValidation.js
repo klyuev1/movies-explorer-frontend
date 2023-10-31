@@ -2,7 +2,7 @@ import React from 'react';
 const regexEmail = /^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]{2,}$/;
 
 
-export default function Validation(formValue, setFormValue) {
+export default function UseValidation(formValue, setFormValue) {
 
   const [formErrors, setFormErrors] = React.useState({});
   const [isValidForm, setIsValidForm] = React.useState(false);

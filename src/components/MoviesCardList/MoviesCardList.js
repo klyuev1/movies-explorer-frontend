@@ -28,8 +28,6 @@ function MoviesCardList({handleSearch, moviesFound, moviesFoundDefault, handleLi
     setMoviesToWidth({all: (all + more), more: more})
   }
 
-
-
   return (
     <section className='movies-cardlist__container'>
       

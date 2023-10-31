@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 
-export const Resize = () => {
+export const UseResize = () => {
   const [width, setWidth] = useState(window.innerWidth);
 
   useEffect(() => {

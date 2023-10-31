@@ -18,7 +18,7 @@ import {signup, signin, getContent, signOut, updateProfile, getMovies, postMovie
 import truth from '../../images/thurh.svg';
 import fail from '../../images/fail.svg';
 import {DATA_URL, MOVIES_S, MOVIES_M, MOVIES_L, WIDTH_M, WIDTH_L, MOVIES_MORE_M, MOVIES_MORE_L, DURATION} from '../../utils/utils';
-import {Resize} from '../../utils/Resize';
+import {UseResize} from '../../utils/UseResize';
 
 
 function App() {
@@ -31,7 +31,7 @@ function App() {
   const [titleInfo, setTitleInfo] = React.useState("");
   const [iconInfo, setIconInfo] = React.useState("");
 
-  const {width} = Resize();
+  const {width} = UseResize();
   const [savedMovies, setSavedMovies] = React.useState([]);
   const [formValueFound, setFormValueFound] = React.useState((localStorage.getItem('moviesPlaceholder')) || '');
   const [moviesFound, setMoviesFound] = React.useState(JSON.parse(localStorage.getItem('moviesFound')) || []);
@@ -51,22 +51,6 @@ function App() {
   }
     //eslint-disable-next-line react-hooks/exhaustive-deps
   },[isLoggedIn]);
-
-  // Функции проверки авторизации
-  function checkToken() {
-    getContent()
-    .then(() => {
-      setIsLoggedIn(true);
-    })
-    .catch((err) => {
-      setIsLoggedIn(false);
-      console.log(err)
-    });
-  }
-
-  React.useEffect(() => {
-    checkToken();
-  }, [isLoggedIn])
   
   // Функции авторизации
   function handleRegister(name, email, password) {
@@ -78,11 +62,6 @@ function App() {
             setTitleInfo("Вы успешно зарегистрировались!");
             setIconInfo(truth);
             navigate('/movies', {replace: true});
-
-            getMovies()
-              .then((data)=> {
-                setSavedMovies(data);
-              })
           })
           .catch(() => {
             setTitleInfo("Что-то пошло не так! Попробуйте ещё раз");
@@ -114,11 +93,6 @@ function App() {
       setTitleInfo("Вы успешно авторизировались!");
       setIconInfo(truth);
       navigate('/movies', {replace: true});
-
-      getMovies()
-        .then((data)=> {
-          setSavedMovies(data);
-        })
     })
     .catch(() => {
       setTitleInfo("Что-то пошло не так! Попробуйте ещё раз.");
@@ -177,26 +151,16 @@ function App() {
       thumbnail: `${DATA_URL}${card.image.formats.thumbnail.url}`,
       movieId: card.id
     })
-    .then(() =>{
-      getMovies()
-      .then((data) =>{
-        setSavedMovies(data)
-      })
-      .catch((err) => console.log(err));
+    .then((newCard) =>{
+      setSavedMovies([newCard, ...savedMovies])
     })
-    .catch((err) => console.log('err'));
+    .catch((err) => console.log(err));
   }
 
   function handleDeleteMovie(card) {
     deleteMovie(card._id)
     .then(() =>{
       setSavedMovies((state) => state.filter((c) => c._id !== card._id));
-      getMovies()
-      .then((data) =>{
-        setSavedMovies(data);
-
-      })
-      .catch((err) => console.log(err));
     })
     .catch((err) => console.log(err));
   }
